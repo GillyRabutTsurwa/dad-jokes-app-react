@@ -1,3 +1,3 @@
 # Dad Jokes App
 
-- documentation coming soon
+- documentation coming at the end
