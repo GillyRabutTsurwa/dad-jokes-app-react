@@ -48,18 +48,9 @@ const Jokes = () => {
     <div className="jokes-container">
       <ul className="jokes__list">
         {jokes.map((currentJoke) => (
-          // NOTE: this didn't work. this is why: https://stackoverflow.com/questions/64626366/why-does-setting-state-in-child-component-onclick-cause-recursive-loop-even-when
-          // <Joke key={currentJoke.id} joke={currentJoke} upVote={handleVote(currentJoke.id)} />
-
-          //   NOTE: this works comme l'on veut
           <Joke
             key={currentJoke.id}
             joke={currentJoke}
-            /**
-             * NOTE i'm not adding (+)1 as the second parametre here, as I do with downvote because I have 1 as the default parametre
-             * so with the default parametre (see actual function), i am not doing this: handleVote(currentJoke.id, 1)
-             * 1 is the default parametre, so if no parametre is specified, 1 will be implicitly applied
-             */
             upVote={() => {
               handleVote(currentJoke.id);
             }}

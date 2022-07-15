@@ -17,5 +17,7 @@
 .app-container {
   display: flex;
   width: 80%;
-  height: 80%;
+  /* height: 80%; */
+  /* TESTING */
+  height: 90%;
 }

@@ -1,23 +1,20 @@
-const Joke = (props) => {
-  // NOTE: now passing the entire joke object as a prop...
-  const { joke, upVote, downVote } = props;
+import "./Joke.css";
 
-  /**
-   * NOTE:
-   * and thus i am destructuring it again
-   * also, i am giving the joke property a new name to use: text for extra clarity...
-   * ...because a joke property from an object with the same name is a bit confusing
-   */
+const Joke = (props) => {
+  const { joke, upVote, downVote } = props;
   const { joke: text, votes } = joke;
 
   return (
-    <li>
+    <li className="joke">
       <div className="joke-buttons">
         <i className="fas fa-arrow-up" onClick={upVote} />
-        <span>{votes}</span>
+        <span className="joke-votes">{votes}</span>
         <i className="fas fa-arrow-down" onClick={downVote} />
       </div>
       <div className="joke-text">{text}</div>
+      <div className="joke-emoji">
+        <i className="em em-rolling_on_the_floor_laughing"></i>
+      </div>
     </li>
   );
 };
