@@ -8,9 +8,7 @@ const Jokes = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // NOTE: temporary limit of jokes. will reconfigure later
-      const limit = 10;
-      const response = await axios.get(`https://icanhazdadjoke.com/search?limit=${limit}`, {
+      const response = await axios.get(`https://icanhazdadjoke.com/search`, {
         headers: {
           Accept: "application/json",
         },
