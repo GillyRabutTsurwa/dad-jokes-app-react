@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Joke from "./Joke";
+import "./Jokes.css";
 
 const Jokes = () => {
   const [jokes, setJokes] = useState([]);
@@ -27,7 +28,6 @@ const Jokes = () => {
 
   return (
     <div className="jokes-container">
-      <h1>Dad Jokes</h1>
       <ul className="jokes__list">
         {jokes.map((currentJoke) => (
           <Joke key={currentJoke.id} joke={currentJoke.joke} />
