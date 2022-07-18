@@ -1,61 +1,47 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchJokes } from "./store/modules/jokes/jokesSlice";
 import axios from "axios";
+
 import Joke from "./Joke";
 import "./Jokes.css";
 
 const Jokes = () => {
-  const [jokes, setJokes] = useState([]);
+  // TESTING
+  const jokes = useSelector((state) => state.jokes);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`https://icanhazdadjoke.com/search`, {
-        headers: {
-          Accept: "application/json",
-        },
-      });
+    dispatch(fetchJokes());
 
-      console.log(response);
-      const data = response.data;
-      const rigolos = data.results.map((currentRigolo) => {
-        return {
-          /**
-           * NOTE:
-           * ici, on veut ajouter un propietaire "custom" qui ne se trouve pas, par defaut, à l'objet
-           * on va donc utiliser le "spread operator", pour appliquer les propietaires existantes dans un nouvel objet
-           * et aussi ajouter un nouveau propietaire (votes)
-           * on verifiant au console, ça marche bien
-           */
-          ...currentRigolo,
-          votes: 0,
-        };
-      });
-      setJokes(rigolos);
-    };
-
-    fetchData();
+    console.log(jokes);
   }, []);
 
-  const handleVote = (id, delta = 1) => {
-    const jokesWithVotes = jokes.map((currentJoke) => {
-      return currentJoke.id === id ? { ...currentJoke, votes: currentJoke.votes + delta } : currentJoke;
-    });
-    setJokes(jokesWithVotes);
-  };
+  console.log(jokes);
+
+  // NOTE: doesn't work after including redux, so will comment out
+  // const handleVote = (id, delta = 1) => {
+  //   const jokesWithVotes = jokes.jokes.map((currentJoke) => {
+  //     return currentJoke.id === id ? { ...currentJoke, votes: currentJoke.votes + delta } : currentJoke;
+  //   });
+  //   jokes.jokes = jokesWithVotes;
+  // };
 
   return (
     <div className="jokes-container">
       <ul className="jokes__list">
-        {jokes.map((currentJoke) => (
-          <Joke
-            key={currentJoke.id}
-            joke={currentJoke}
-            upVote={() => {
-              handleVote(currentJoke.id);
-            }}
-            downVote={() => {
-              handleVote(currentJoke.id, -1);
-            }}
-          />
+        {jokes.jokes.map((currentJoke) => (
+          // <Joke
+          //   key={currentJoke.id}
+          //   joke={currentJoke}
+          //   upVote={() => {
+          //     handleVote(currentJoke.id);
+          //   }}
+          //   downVote={() => {
+          //     handleVote(currentJoke.id, -1);
+          //   }}
+          // />
+          <Joke key={currentJoke.id} joke={currentJoke} />
         ))}
       </ul>
     </div>
