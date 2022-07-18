@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchJokes } from "./store/modules/jokes/jokesSlice";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Joke from "./Joke";
@@ -8,40 +6,51 @@ import "./Jokes.css";
 
 const Jokes = () => {
   // TESTING
-  const jokes = useSelector((state) => state.jokes);
-  const dispatch = useDispatch();
+  const [jokes, setJokes] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchJokes());
+    (async () => {
+      const response = await axios.get(`https://icanhazdadjoke.com/search`, {
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
-    console.log(jokes);
+      console.log(response);
+      const data = response.data;
+      const rigolos = data.results.map((currentRigolo) => {
+        return {
+          ...currentRigolo,
+          votes: 0,
+        };
+      });
+      setJokes(rigolos);
+    })();
   }, []);
 
   console.log(jokes);
 
-  // NOTE: doesn't work after including redux, so will comment out
-  // const handleVote = (id, delta = 1) => {
-  //   const jokesWithVotes = jokes.jokes.map((currentJoke) => {
-  //     return currentJoke.id === id ? { ...currentJoke, votes: currentJoke.votes + delta } : currentJoke;
-  //   });
-  //   jokes.jokes = jokesWithVotes;
-  // };
+  const handleVote = (id, delta = 1) => {
+    const jokesWithVotes = jokes.map((currentJoke) => {
+      return currentJoke.id === id ? { ...currentJoke, votes: currentJoke.votes + delta } : currentJoke;
+    });
+    setJokes(jokesWithVotes);
+  };
 
   return (
     <div className="jokes-container">
       <ul className="jokes__list">
-        {jokes.jokes.map((currentJoke) => (
-          // <Joke
-          //   key={currentJoke.id}
-          //   joke={currentJoke}
-          //   upVote={() => {
-          //     handleVote(currentJoke.id);
-          //   }}
-          //   downVote={() => {
-          //     handleVote(currentJoke.id, -1);
-          //   }}
-          // />
-          <Joke key={currentJoke.id} joke={currentJoke} />
+        {jokes.map((currentJoke) => (
+          <Joke
+            key={currentJoke.id}
+            joke={currentJoke}
+            upVote={() => {
+              handleVote(currentJoke.id);
+            }}
+            downVote={() => {
+              handleVote(currentJoke.id, -1);
+            }}
+          />
         ))}
       </ul>
     </div>
