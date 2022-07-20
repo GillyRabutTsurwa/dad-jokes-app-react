@@ -1,41 +1,18 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchJokes, vote } from "./store/modules/jokes/jokesSlice";
 
 import Joke from "./Joke";
 import "./Jokes.css";
 
 const Jokes = () => {
   // TESTING
-  const [jokes, setJokes] = useState([]);
+  const { error, jokes, loading } = useSelector((state) => state.jokes);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      const response = await axios.get(`https://icanhazdadjoke.com/search`, {
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      console.log(response);
-      const data = response.data;
-      const rigolos = data.results.map((currentRigolo) => {
-        return {
-          ...currentRigolo,
-          votes: 0,
-        };
-      });
-      setJokes(rigolos);
-    })();
+    dispatch(fetchJokes());
   }, []);
-
-  console.log(jokes);
-
-  const handleVote = (id, delta = 1) => {
-    const jokesWithVotes = jokes.map((currentJoke) => {
-      return currentJoke.id === id ? { ...currentJoke, votes: currentJoke.votes + delta } : currentJoke;
-    });
-    setJokes(jokesWithVotes);
-  };
 
   return (
     <div className="jokes-container">
@@ -45,10 +22,12 @@ const Jokes = () => {
             key={currentJoke.id}
             joke={currentJoke}
             upVote={() => {
-              handleVote(currentJoke.id);
+              // dispatch(vote(currentJoke, 1));
+              dispatch(vote({ currentJoke: currentJoke, delta: 1 }));
             }}
             downVote={() => {
-              handleVote(currentJoke.id, -1);
+              // dispatch(vote(currentJoke, -1));
+              dispatch(vote({ currentJoke: currentJoke, delta: -1 }));
             }}
           />
         ))}
